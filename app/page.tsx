@@ -111,16 +111,17 @@ export default function Home() {
       )}
     >
       {/* Background radial effects */}
-      <div className="fixed top-[-20%] left-[-10%] w-[60%] h-[60%] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none" />
-      <div className="fixed bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none" />
+      <div className="fixed top-0 left-0 w-[50%] h-[50%] bg-purple-600/10 rounded-full blur-[150px] pointer-events-none float-animation" />
+      <div className="fixed bottom-0 right-0 w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[150px] pointer-events-none float-animation" style={{ animationDelay: '3s' }} />
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-pink-600/5 rounded-full blur-[150px] pointer-events-none" />
       
       {/* Subtle noise texture */}
-      <div className="fixed inset-0 opacity-[0.015] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+      <div className="fixed inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
       <div
         className={cn(
           "z-10 w-full mx-auto relative",
-          result ? "max-w-6xl space-y-8" : "max-w-md space-y-10"
+          result ? "max-w-6xl space-y-8" : "max-w-lg space-y-10"
         )}
       >
         
@@ -128,26 +129,29 @@ export default function Home() {
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center space-y-3"
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center space-y-4"
         >
-          <h1 className="text-4xl sm:text-5xl font-black tracking-tighter">
-            <span className="text-gradient drop-shadow-sm">Rate IG</span> 🔥
+          <div className="inline-block mb-2 px-3 py-1 rounded-full glass border-white/10 text-xs font-medium tracking-wide text-zinc-300">
+            ✨ Cek profile IG siapapun
+          </div>
+          <h1 className="text-5xl sm:text-6xl font-black tracking-tight leading-tight">
+            <span className="text-gradient drop-shadow-lg">Rate IG</span> 🔥
           </h1>
-          <p className="text-zinc-400 text-sm sm:text-base font-medium tracking-wide">
+          <p className="text-zinc-400 text-base sm:text-lg font-medium tracking-wide max-w-md mx-auto leading-relaxed">
             Cari profil Instagram publik dan tampilkan preview-nya langsung tanpa login
           </p>
         </motion.div>
 
         {/* Input Section */}
         <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="glass rounded-[2rem] p-6 sm:p-8 shadow-2xl relative max-w-md mx-auto"
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          className="glass rounded-3xl p-8 sm:p-10 shadow-2xl relative w-full border-t border-white/10"
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent rounded-[2rem] pointer-events-none" />
-          <form onSubmit={handleAnalyze} className="space-y-6 flex flex-col items-center relative z-10">
+          <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent rounded-3xl pointer-events-none" />
+          <form onSubmit={handleAnalyze} className="space-y-6 flex flex-col items-center relative z-10 w-full group">
             <InputField 
               placeholder="Username Instagram (tanpa @)"
               value={username}

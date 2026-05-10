@@ -145,7 +145,7 @@ export function ResultCard({
             alt={`Preview profil ${username}`}
             fill
             sizes="100vw"
-            unoptimized
+            referrerPolicy="no-referrer"
             className="object-cover opacity-20 blur-2xl scale-110"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-fuchsia-500/10 via-black/65 to-black/95" />
@@ -168,10 +168,10 @@ export function ResultCard({
         </div>
 
         <div className="space-y-8 px-5 py-6 sm:px-7 sm:py-8">
-          <div className="grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)] lg:items-start">
-            <div className="space-y-5">
+          <div className="grid gap-8 lg:grid-cols-[300px_minmax(0,1fr)] lg:items-start w-full">
+            <div className="flex flex-col gap-6 w-full lg:sticky lg:top-6 lg:self-start">
               <div className="mx-auto flex w-fit flex-col items-center lg:items-start">
-                <div className="relative h-36 w-36 rounded-full p-[4px] bg-[conic-gradient(from_180deg,_#f472b6,_#8b5cf6,_#f97316,_#f472b6)] shadow-[0_0_45px_rgba(236,72,153,0.22)]">
+                <div className="relative h-44 w-44 rounded-full p-[4px] bg-[conic-gradient(from_180deg,_#f472b6,_#8b5cf6,_#f97316,_#f472b6)] shadow-[0_0_45px_rgba(236,72,153,0.22)]">
                   <div className="relative h-full w-full overflow-hidden rounded-full bg-black">
                     {avatarUrl ? (
                       <Image
@@ -179,7 +179,7 @@ export function ResultCard({
                         alt={`Foto profil ${username}`}
                         fill
                         sizes="144px"
-                        unoptimized
+                        referrerPolicy="no-referrer"
                         className="object-cover"
                       />
                     ) : (
@@ -191,15 +191,17 @@ export function ResultCard({
                 </div>
               </div>
 
-              <div className="rounded-[1.5rem] border border-white/8 bg-black/30 p-5 backdrop-blur-xl">
-                <div className="mb-3 flex items-center justify-between gap-3">
+              <div className="rounded-[1.5rem] border border-white/10 bg-black/40 p-6 backdrop-blur-xl w-full">
+                <div className="mb-4 flex items-center justify-between gap-3 border-b border-white/5 pb-4">
                   <span className="text-xs font-black uppercase tracking-[0.28em] text-zinc-400">Aura Panel</span>
                   <span className={`rounded-full border px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] ${getBadgeStyle(finalScore)}`}>
                     {finalAura.badge}
                   </span>
                 </div>
-                <p className="text-sm leading-relaxed text-zinc-300">{finalAura.description}</p>
-                <RatingBar score={finalScore} />
+                <p className="text-sm font-medium leading-relaxed text-zinc-300">{finalAura.description}</p>
+                <div className="mt-6 mb-2">
+                  <RatingBar score={finalScore} />
+                </div>
                 {hasAutoScore ? (
                   <>
                     <div className="mt-5 grid grid-cols-2 gap-3 text-left">
@@ -267,8 +269,8 @@ export function ResultCard({
               </div>
             </div>
 
-            <div className="space-y-6">
-              <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+            <div className="flex flex-col gap-8 w-full">
+              <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between w-full">
                 <div className="space-y-3">
                   <div className="flex flex-wrap items-center gap-3">
                     <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl">@{username}</h2>
@@ -291,12 +293,12 @@ export function ResultCard({
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-3 sm:flex-row">
+                <div className="flex flex-col gap-3 min-w-[200px] shrink-0 sm:flex-row xl:flex-col">
                   <a
                     href={profileUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-gradient-to-r from-fuchsia-600 via-violet-600 to-blue-600 px-5 py-3 text-sm font-bold text-white shadow-[0_0_25px_rgba(168,85,247,0.3)] transition hover:shadow-[0_0_35px_rgba(168,85,247,0.45)]"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-gradient-to-r from-fuchsia-600 via-violet-600 to-blue-600 px-6 py-3.5 text-sm font-bold text-white shadow-[0_0_25px_rgba(168,85,247,0.3)] transition hover:shadow-[0_0_35px_rgba(168,85,247,0.45)]"
                   >
                     <ExternalLink className="h-4 w-4" />
                     Buka Profil IG
@@ -306,7 +308,7 @@ export function ResultCard({
                       href={externalUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/6 px-5 py-3 text-sm font-bold text-zinc-100 transition hover:bg-white/10"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/6 px-6 py-3.5 text-sm font-bold text-zinc-100 transition hover:bg-white/10"
                     >
                       <Link2 className="h-4 w-4" />
                       Link di Bio
@@ -315,23 +317,23 @@ export function ResultCard({
                 </div>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 w-full">
                 {statItems.map((item) => (
                   <div
                     key={item.label}
-                    className="rounded-[1.35rem] border border-white/8 bg-white/5 px-4 py-4 text-left backdrop-blur-md"
+                    className="flex flex-col items-center justify-center rounded-3xl border border-white/10 bg-white/5 px-6 py-6 text-center backdrop-blur-md transition-all hover:bg-white/10 w-full"
                   >
-                    <div className="text-2xl font-black text-white">{item.value}</div>
-                    <div className="mt-1 text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500">
+                    <div className="text-3xl font-black text-white">{item.value}</div>
+                    <div className="mt-2 text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-400">
                       {item.label}
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="space-y-4 rounded-[1.6rem] border border-white/8 bg-black/25 p-5 backdrop-blur-xl">
-                <div className="space-y-2">
-                  <p className="text-sm font-semibold text-zinc-100 whitespace-pre-line">{biography || "Belum ada bio yang bisa ditampilkan."}</p>
+              <div className="space-y-4 rounded-3xl border border-white/10 bg-black/40 p-6 backdrop-blur-xl w-full">
+                <div className="space-y-3">
+                  <p className="text-sm font-semibold text-zinc-200 whitespace-pre-line leading-relaxed">{biography || "Belum ada bio yang bisa ditampilkan."}</p>
                   {externalLinks.length > 0 ? (
                     <div className="flex flex-wrap gap-2 pt-1">
                       {externalLinks.slice(0, 4).map((link) => (
@@ -350,11 +352,10 @@ export function ResultCard({
                   ) : null}
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center justify-between gap-3">
+              {/* TABS & POSTS (Dipindah ke dalam Right Column agar rata) */}
+              <div className="space-y-4 pt-3">
+                <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-sm font-black uppercase tracking-[0.32em] text-zinc-400">Sorotan</p>
                 <p className="text-sm text-zinc-500">Ring sorotan visual dibuat dari data profil dan media terbaru yang tersedia.</p>
@@ -372,7 +373,7 @@ export function ResultCard({
                           alt={item.title}
                           fill
                           sizes="80px"
-                          unoptimized
+                          referrerPolicy="no-referrer"
                           className="object-cover"
                         />
                       ) : (
@@ -444,7 +445,7 @@ export function ResultCard({
                           alt={post.caption || `Post ${post.shortCode || post.id}`}
                           fill
                           sizes="(max-width: 768px) 100vw, 33vw"
-                          unoptimized
+                          referrerPolicy="no-referrer"
                           className="object-cover transition duration-500 group-hover:scale-105"
                         />
                       ) : (
@@ -500,6 +501,10 @@ export function ResultCard({
               </div>
             )}
           </div>
+
+            </div>
+          </div>
+
         </div>
       </div>
     </motion.section>

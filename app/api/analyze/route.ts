@@ -7,7 +7,7 @@ const APIFY_TOKEN = process.env.APIFY_TOKEN;
 const APIFY_INSTAGRAM_PROFILE_ACTOR =
   process.env.APIFY_INSTAGRAM_PROFILE_ACTOR ?? "apify~instagram-profile-scraper";
 
-type ProfileSource = "apify" | "public-html" | "public-api" | "limited";
+type ProfileSource = "apify" | "public-html" | "public-api" | "embed-html" | "limited";
 
 interface ProfileExternalLink {
   title: string;
@@ -105,6 +105,18 @@ export async function GET(request: Request) {
 
     if (apiResult.status === "ok" && apiResult.seed) {
       return NextResponse.json(buildResponse(apiResult.seed, "public-api"));
+    }
+
+    const embedResult = await fetchProfileFromEmbed(username);
+    if (embedResult.status === "not-found") {
+      return NextResponse.json(
+        { error: "Username Instagram tidak ditemukan." },
+        { status: 404 }
+      );
+    }
+
+    if (embedResult.status === "ok" && embedResult.seed) {
+      return NextResponse.json(buildResponse(embedResult.seed, "embed-html"));
     }
 
     return NextResponse.json(buildResponse({ username }, "limited"));
@@ -330,6 +342,52 @@ async function fetchProfileFromApi(username: string): Promise<FetchResult> {
       isPrivate: user.is_private ?? null,
       isVerified: user.is_verified ?? null,
     },
+  };
+}
+
+async function fetchProfileFromEmbed(username: string): Promise<FetchResult> {
+  const response = await fetch(`https://www.instagram.com/${username}/embed/`, {
+    headers: {
+      "User-Agent": INSTAGRAM_USER_AGENT,
+      "Accept-Language": "en-US,en;q=0.9",
+    },
+    next: { revalidate: 300 },
+  });
+
+  if (response.status === 404) return { status: "not-found" };
+  if (!response.ok) return { status: "unavailable" };
+
+  const html = await response.text();
+  
+  const picMatch = html.match(/class="[^"]*EmbeddedProfilePic[^"]*"[^>]*src="([^"]+)"/i)
+    || html.match(/profile_pic_url['":\s]+['"]([^'"]+)['"]/i)
+    || html.match(/<img[^>]+src="(https:\/\/[^"]*cdninstagram[^"]*)"[^>]*>/i);
+  
+  const nameMatch = html.match(/<title>([^<]+)<\/title>/i);
+  
+  const jsonFollowers = html.match(/"edge_followed_by"\s*:\s*\{\s*"count"\s*:\s*(\d+)\s*\}/i);
+
+  if (!picMatch && !nameMatch && !jsonFollowers) {
+    return { status: "unavailable" };
+  }
+
+  const avatarUrl = picMatch ? decodeHtmlEntities(picMatch[1].replace(/\\u0026/g, "&")) : null;
+  const fullNameMatch = nameMatch ? nameMatch[1].replace(/ - Instagram$/, "").trim() : null;
+  let fullName = username;
+  if (fullNameMatch && fullNameMatch !== "Instagram") {
+     fullName = fullNameMatch.split(" (@")[0];
+  }
+  
+  const followersCount = jsonFollowers ? Number.parseInt(jsonFollowers[1], 10) : null;
+
+  return {
+    status: "ok",
+    seed: {
+      username,
+      fullName,
+      avatarUrl,
+      followersCount,
+    }
   };
 }
 

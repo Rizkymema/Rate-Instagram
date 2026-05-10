@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Rate IG 🔥",
+  title: "x 🔥",
   description: "Cek seberapa keren Instagram kamu dengan Rate IG",
 };
 
